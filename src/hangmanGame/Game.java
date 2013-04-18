@@ -3,7 +3,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.io.PrintStream;
 
 import acm.program.ConsoleProgram;
 import acm.util.RandomGenerator;

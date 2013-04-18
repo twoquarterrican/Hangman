@@ -12,11 +12,19 @@ body is drawn on the gallows.  First the head, then the torso, then an arm,
 etc.  If every body part is drawn before the word is guessed, the player loses.
 Otherwise, the player wins.
 
-The main class is called Game.  It is a subclass of the acm class ConsoleProgram.  The game is played through a console interface, and the progress is recorded in a GUI screen next to the console.
+The main class is called Game.  It is a subclass of the acm class
+ConsoleProgram.  The game is played through a console interface, and the
+progress is recorded in a GUI screen next to the console.
 
-TODO: Activate mouse listeners in canvas so that either a console guess or a
-mouse click guess can be entered.  This is a good way to learn about
-concurrency. Since the console method `readLine()` occupies the main thread
-completely, I need two threads, one listening for a mouse click on the letters
-and another listening for letters typed into the console.  If either thread
-finishes, the other should be cancelled and the result evaluated.
+Added to original assignment:
+1.  Letters change color when they are guessed.  For example if the player
+	guesses 'A' then the background of the square containing 'A' changes to
+green if the word contains 'A' and turns green otherwise.
+
+2.  An animation of falling confetti is shown at the end of the game upon
+	winning.
+
+3.  A letter can be guessed either by typing it or by clicking it.  This was a
+	way for me to learn to use `synchronized` blocks as well as `wait()` and
+`notify()`.
+
