@@ -70,6 +70,10 @@ public class Letters extends GCompound {
 		
 	}
 	
+	public Letter getLetterAt(double x_canvas, double y_canvas) {
+		return (Letter)this.getElementAt(this.getLocalPoint(x_canvas, y_canvas));
+	}
+	
 	public char clickLetterAt(double x_canvas, double y_canvas) {
 		Letter letter = (Letter)this.getElementAt(this.getLocalPoint(x_canvas, y_canvas));
 		if (letter != null) {

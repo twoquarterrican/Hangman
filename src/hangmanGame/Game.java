@@ -1,9 +1,14 @@
 package hangmanGame;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+
 import acm.program.ConsoleProgram;
 import acm.util.RandomGenerator;
 
 @SuppressWarnings("serial")
-public class Game extends ConsoleProgram implements Runnable {
+public class Game extends ConsoleProgram {
 
 	public static final int APPLICATION_WIDTH = 620;
 	public static final int APPLICATION_HEIGHT = 690;
@@ -28,6 +33,8 @@ public class Game extends ConsoleProgram implements Runnable {
 		//Cannot do this in the run() method
 		canvas = new HangmanCanvas();
 		add(canvas);
+//		canvas.addMouseListener(new LetterClickListener());
+//		addKeyListener(new LetterTypeListener());
 	}
 
 	public void run() {
@@ -42,6 +49,7 @@ public class Game extends ConsoleProgram implements Runnable {
 	private boolean PlayAgain() {
 		while(true) {
 			String again = readLine("Play Again? (Y/N) :");
+			if(again.equals("")) continue;
 			char chAgain = again.toUpperCase().charAt(0);
 			if (chAgain == 'Y') {
 				return true;
@@ -162,5 +170,69 @@ public class Game extends ConsoleProgram implements Runnable {
 		}
 		return word;
 	}
+	public void mousePressed(MouseEvent e) {
+		
+		System.out.println("unclassed mouse event fired");
+		String message = "mouse event at (" + e.getX() + "," + e.getY() + ")\n";
+		message += "  Letter clicked was ";
+		Letter letter = canvas.getLetters().getLetterAt(e.getX(),e.getY());
+		message += (letter == null ? "null" : letter.getCh());
+		System.out.println(message);
+	}
+	
+//	private class LetterClickListener implements MouseListener {
+//
+//		@Override
+//		public void mouseClicked(MouseEvent arg0) {
+//			// TODO Auto-generated method stub
+//
+//		}
+//
+//		@Override
+//		public void mouseEntered(MouseEvent e) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public void mouseExited(MouseEvent e) {
+//			// TODO Auto-generated method stub
+//			
+//		}
+//
+//		@Override
+//		public void mousePressed(MouseEvent e) {
+//			System.out.println("mouse pressed");
+//			Game.this.getWriter().write("mouse pressed");
+//			
+//		}
+//
+//		@Override
+//		public void mouseReleased(MouseEvent e) {
+//			// ignore
+//			
+//		}
+//
+//	}
+//	
+//	private class LetterTypeListener implements KeyListener {
+//		public void keyPressed(KeyEvent e) {
+//			String message = "key event:\n";
+//			message += "  Key pressed was " + e.getKeyChar();
+//			System.out.println(message);
+//		}
+//
+//		@Override
+//		public void keyReleased(KeyEvent arg0) {
+//			// ignore
+//
+//		}
+//
+//		@Override
+//		public void keyTyped(KeyEvent arg0) {
+//			// ignore
+//			System.out.println("stuff");
+//		}
+//	}
 	
 }
