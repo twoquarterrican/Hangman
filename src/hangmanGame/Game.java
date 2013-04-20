@@ -62,6 +62,7 @@ public class Game extends ConsoleProgram {
 		int maxIndex = lexicon.getWordCount()-1;
 		int randomIndex = rgen.nextInt(0, maxIndex);
 		String word = lexicon.getWord(randomIndex);
+		//unknown spots in secret word are blanks "-"
 		guessWord = "";
 		for(int i = 0; i < word.length(); i++){
 			guessWord += "-";
@@ -99,6 +100,7 @@ public class Game extends ConsoleProgram {
 		//event loops do nothing unless this flag is set to true
 		waitingForGuess = true;
 		canvas.requestFocusInWindow();
+		//use the synchronizing object to make this thread wait for a letter guess from the player
 		synchronized (syncObject) {
 			try {
 				syncObject.wait();
@@ -110,16 +112,20 @@ public class Game extends ConsoleProgram {
 	}
 	
 	private void guessReceived(char guess) {
+		//flag tells us to ignor guesses or not.  We ignore when the main event loop is processing a guess or preparing for another one
 		if (waitingForGuess) {
 			guess = Character.toUpperCase(guess);
 			println(guess);	
 			if ('A' <= guess && guess <= 'Z' && isNewGuess(guess)) {
+				//found a new guess
 				waitingForGuess = false;
 				evaluateValidGuess(guess);
+				//use synchronizing object to wake up main thread now that we have a guess from the player
 				synchronized (syncObject) {
 					syncObject.notify();
 				}
 			} else {
+				//found a repeat guess
 				println("You already guessed " + guess);
 				print("Choose a letter: ");
 			}
@@ -128,7 +134,7 @@ public class Game extends ConsoleProgram {
 
 	boolean isNewGuess(char guess) {
 		//did the player already guess this character?
-		//use Letter object to record this
+		//Letter objects store a flage telling if they have been guessed or not
 		Letter letter = canvas.getLetters().getLetter(guess);
 		if (letter.hasBeenGuessed()) {
 			return false;
@@ -141,17 +147,15 @@ public class Game extends ConsoleProgram {
 	private void evaluateValidGuess(char guess) {
 		//this method assumes guess un-guessed letter, so this method only needs to decide if numGuesses is decremented or if guessWord is updated
 		
-		//by default chGuess not found in secretWord
+		//by default guess not found in secret word
 		boolean found = false;
 		//the index variable iterates over all positions of chGuess in secretWord.  Initialize to -1, which is the value of secretWord.indexOf(chGuess) if chGuess is not found
 		int index = -1;
-		//sentinel for while loop is chGuess no longer found in substring of secretWord ranging from index+1 to the end
+		//look for all occurences of guess in the secret word
 		while (true) {
-			//get the index of chGuess starting from next place to look (whole word if index == -1
 			index = secretWord.indexOf(guess, index+1);
-			//if chGuess not found in this substring of secretWord, break out of the loop
 			if (index == -1 ) break;
-			//if chGuess is found in this substring of secretWord, put chGuess into index position of guessWord
+			//if Guess is found in this substring of secretWord, put Guess into index position of guessWord
 			guessWord = guessWord.substring(0, index) + guess + guessWord.substring(index+1);
 			found = true;
 		}
@@ -194,6 +198,7 @@ public class Game extends ConsoleProgram {
 	}
 	
 	private class LetterClickListener implements MouseListener {
+		//for clicked guesses
 		
 		@Override
 		public void mousePressed(MouseEvent e) {
@@ -224,6 +229,7 @@ public class Game extends ConsoleProgram {
 	}
 	
 	private class LetterTypeListener implements KeyListener {
+		// for typed guesses
 		public void keyPressed(KeyEvent e) {
 			guessReceived(e.getKeyChar());
 		}
@@ -238,17 +244,6 @@ public class Game extends ConsoleProgram {
 			// ignore
 		}
 	}
-	
-	//returns a guess guaranteed to be in the alphabet and not already guessed
-//	private char getAValidGuess() {
-//		while(true) {
-//			String line;
-//			line = readLine("Choose a letter: ");
-//			if (line.equals("")) continue;
-//			char guess = line.toUpperCase().charAt(0);
-//			if ('A' <= guess && guess <= 'Z' && isNewGuess(guess)) return guess;
-//		}
-//	}
 	
 }
 

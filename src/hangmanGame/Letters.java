@@ -1,6 +1,4 @@
 package hangmanGame;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 
 import acm.graphics.GCompound;
 
@@ -27,9 +25,6 @@ public class Letters extends GCompound {
 			add(letters[i]);
 			letter++;
 		}
-		listener = new ClickLetter();
-		this.addMouseListener(listener);
-		listenForGuess = false;
 	}
 	
 	public Letter getLetter(char chGuess) {
@@ -40,69 +35,10 @@ public class Letters extends GCompound {
 		return null;
 	}
 	
-	private class ClickLetter implements MouseListener {
-		@Override
-		public void mouseClicked(MouseEvent e) {
-			//ignore
-		}
-
-		@Override
-		public void mouseEntered(MouseEvent e) {
-			// ignore
-		}
-
-		@Override
-		public void mouseExited(MouseEvent e) {
-			// ignore
-		}
-
-		@Override
-		public void mousePressed(MouseEvent e) {
-			if (listenForGuess) {
-				clickLetterAt(e.getX(),e.getY());
-			}			
-		}
-
-		@Override
-		public void mouseReleased(MouseEvent e) {
-			//ignore			
-		} 
-		
-	}
-	
 	public Letter getLetterAt(double x_canvas, double y_canvas) {
 		return (Letter)this.getElementAt(this.getLocalPoint(x_canvas, y_canvas));
 	}
 	
-	public char clickLetterAt(double x_canvas, double y_canvas) {
-		Letter letter = (Letter)this.getElementAt(this.getLocalPoint(x_canvas, y_canvas));
-		if (letter != null) {
-			//make sure the letter clicked has not been clicked yet, and make sure we are not clicking two different letters very quickly
-			if (letter.hasNotBeenGuessed() && listenForGuess) {
-				letter.setAsGuessed();
-				letterJustGuessed = letter.getCh();
-				//tell readline what guess we have
-				//this.getComponent().transferFocusBackward();
-				//robot.simulateInput(letter.getCh());
-				listenForGuess = false;
-			}
-			return letter.getCh();
-		}
-		return 0;
-	}
-	
-	private ClickLetter listener;
-	private boolean listenForGuess;
 	private Letter[] letters = new Letter[26];
-	private char letterJustGuessed;
 
-
-	public char waitForGuess() {
-		listenForGuess = true;
-		while (true) {
-			if (!listenForGuess) break;
-		}
-		return letterJustGuessed;
-	}
-	
 }
