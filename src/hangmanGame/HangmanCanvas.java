@@ -109,7 +109,7 @@ public class HangmanCanvas extends GCanvas {
 			public void run() {
 				//constructor needs the canvas which it will add the celebration objects to.
 				animation = new Animation(HangmanCanvas.this);
-				animation.startWinAnimation();
+				animation.startAnimation();
 			}
 		});
 		//setting gameNotRestartedYet to false will terminate winAnimation();
