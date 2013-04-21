@@ -38,7 +38,7 @@ public class HangmanCanvas extends GCanvas {
 
 	private void endAnimations() {
 		//if the hangman animation ha has been initialized, tell it to stop execution
-		if (animation != null) animation.end();
+		if (animation != null) animation.stopAnimation();
 		//now the thread which was running animation.startAnimation() will come to an end.  Wait for it to end before moving on.  This insures we don't
 		//have any leftover confetti, or snowflakes on the screen (or whatever the current celebration theme is)
 		if (winAnimation != null) {
@@ -73,8 +73,6 @@ public class HangmanCanvas extends GCanvas {
 	public void displayWord(String guessWord) { 
 		secretWordLabel.setLabel(guessWord);
 	} 
-
-
 	
 	private void drawAlphabet(String secretWord) {
 		double x = (getWidth() - LETTER_BOX_WIDTH*NUM_LETTER_COLS)/2;
